@@ -6,7 +6,7 @@ A simple project tool for Emacs.
 This library allows the user to use Emacs on multiple projects.  
 Any project has it's ".aproject" dirctory for store some files, like: session, desktop, etc.
 
-Usag
+Usage
 -----
 
 Add the following to your `init.el` (after the `aproject.el` in you load-path):
@@ -30,36 +30,36 @@ Variables
 -------
 
 **aproject-project** (ReadOnly)
-> When aproject initialize like a **project** it t else nil.
+When aproject initialize like a **project** it t else nil.
 
 **aproject-rootdir** (ReadOnly)
-> The aproject working directory.
+The aproject working directory.
 
 **aproject-storedir** (ReadOnly)
-> The aproject store directory for store *project* specifec files.  
-> Any project has itself store directory.
+The aproject store directory for store *project* specifec files.  
+Any project has itself store directory.
 
 Functions
 -------
 
 **aproject-root-file (name)**
-> Get file path in **aproject-rootdir**.
+Get file path in **aproject-rootdir**.
 
 **aproject-store-file (name)**
-> Get file path in **aproject-storedir**
+Get file path in **aproject-storedir**
 
 Macros
 -------
 
 **before-aproject-change**
-> Wrap aproject-before-change-hook, it should call before the aproject change
-> **project**.  
-> You can store some files for previous **project**.
+Wrap aproject-before-change-hook, it should call before the aproject change
+**project**.  
+You can store some files for previous **project**.
 
 **after-aproject-change**
-> Wrap aproject-after-change-hook, it should call after the aproject change
-> **project**.  
-> You can read some files for current **project**.
+Wrap aproject-after-change-hook, it should call after the aproject change
+**project**.  
+You can read some files for current **project**.
 
 License
 -------
@@ -76,4 +76,3 @@ PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program; if not, write to the Free Software Foundation, Inc., 51 Franklin
 Street, Fifth Floor, Boston, MA 02110-1301, USA.
-
