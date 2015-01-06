@@ -87,20 +87,19 @@
 
 (defun aproject-change-rootdir (rootdir &optional storedir)
   "Change aproject's ROOTDIR directory, it can specific the STOREDIR."
-  (if (file-directory-p rootdir)
-      (progn
-        (unless storedir
-          (setq storedir (expand-file-name aproject-dirname rootdir)))
-        (unless (file-directory-p storedir)
-          (make-directory storedir t))
-        (when (stringp aproject-storedir)
-          (run-hooks 'aproject-before-change-hook)
-          (aproject-kill-buffers-switch-scratch))
-        (cd rootdir)
-        (setq aproject-rootdir rootdir)
-        (setq aproject-storedir storedir)
-        (run-hooks 'aproject-after-change-hook))
-    (message "%s is not directory." rootdir)))
+  (unless (file-directory-p rootdir)
+    (error "%s is not directory" rootdir))
+  (unless storedir
+    (setq storedir (expand-file-name aproject-dirname rootdir)))
+  (unless (file-directory-p storedir)
+    (make-directory storedir t))
+  (when (stringp aproject-storedir)
+    (run-hooks 'aproject-before-change-hook)
+    (aproject-kill-buffers-switch-scratch))
+  (cd rootdir)
+  (setq aproject-rootdir rootdir)
+  (setq aproject-storedir storedir)
+  (run-hooks 'aproject-after-change-hook))
 
 (defun aproject-auto-initialize ()
   "Auto initialize the aproject environment."
@@ -115,6 +114,21 @@
     (aproject-change-rootdir rootdir storedir)))
 
 (add-hook 'after-init-hook 'aproject-auto-initialize)
+
+(defun aproject-change-project ()
+  "Change current project."
+  (interactive)
+  (let (rootdir)
+    (setq rootdir (read-directory-name "Change to project directory: "))
+    (when (or (equal "" rootdir)
+              (not (file-accessible-directory-p rootdir)))
+      (error "You not have permission to open directory"))
+    (when (string-match "\/$" rootdir)
+      (setq rootdir (replace-match "" t t rootdir)))
+    (let ((len (length aproject-rootdir)))
+      (when (eq t (compare-strings aproject-rootdir 0 len rootdir 0 len t))
+        (error "You need change to difference project directory")))
+    (aproject-change-rootdir rootdir)))
 
 (provide 'aproject)
 ;;; aproject.el ends here

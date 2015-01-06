@@ -19,11 +19,17 @@ You can add custom process when aproject changed like:
 
 ``` el
 (before-aproject-change
- (desktop-save aproject-storedir))
+(desktop-save aproject-storedir))
 
 (after-aproject-change
- (setq desktop-path (list aproject-storedir))
- (desktop-read))
+(setq desktop-path (list aproject-storedir))
+(desktop-read))
+```
+
+Use the "-project" parameter to initialize the target director as project.
+
+``` bash
+emacs -project ~/work/aproject
 ```
 
 Variables
@@ -52,6 +58,10 @@ Get file path in **aproject-rootdir**.
 **aproject-store-file (name)**
 
 Get file path in **aproject-storedir**
+
+** aproject-change-project () **
+
+Change current project. It allows multiple project in one Emacs.
 
 Macros
 -------
