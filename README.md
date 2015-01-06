@@ -30,12 +30,15 @@ Variables
 -------
 
 **aproject-project** (ReadOnly)
+
 When aproject initialize like a **project** it t else nil.
 
 **aproject-rootdir** (ReadOnly)
+
 The aproject working directory.
 
 **aproject-storedir** (ReadOnly)
+
 The aproject store directory for store *project* specifec files.  
 Any project has itself store directory.
 
@@ -43,20 +46,24 @@ Functions
 -------
 
 **aproject-root-file (name)**
+
 Get file path in **aproject-rootdir**.
 
 **aproject-store-file (name)**
+
 Get file path in **aproject-storedir**
 
 Macros
 -------
 
 **before-aproject-change**
+
 Wrap aproject-before-change-hook, it should call before the aproject change
 **project**.  
 You can store some files for previous **project**.
 
 **after-aproject-change**
+
 Wrap aproject-after-change-hook, it should call after the aproject change
 **project**.  
 You can read some files for current **project**.
