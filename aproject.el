@@ -126,7 +126,8 @@
     (when (string-match "\/$" rootdir)
       (setq rootdir (replace-match "" t t rootdir)))
     (let ((len (length aproject-rootdir)))
-      (when (eq t (compare-strings aproject-rootdir 0 len rootdir 0 len t))
+      (when (and aproject-project
+                 (eq t (compare-strings aproject-rootdir 0 len rootdir 0 len t)))
         (error "You need change to difference project directory")))
     (aproject-change-rootdir rootdir)))
 
