@@ -38,7 +38,7 @@ Variables
 
 **aproject-project** (ReadOnly)
 
-When aproject initialize like a **project** it t else nil.
+If aproject initialize like a **project** that is t else nil.
 
 **aproject-rootdir** (ReadOnly)
 
@@ -69,13 +69,13 @@ Macros
 
 **before-aproject-change**
 
-Wrap aproject-before-change-hook, it should call before the aproject change
+Wrap **aproject-before-change-hook**, it should call before the aproject change
 **project**.  
 You can store some files for previous **project**.
 
 **after-aproject-change**
 
-Wrap aproject-after-change-hook, it should call after the aproject change
+Wrap **aproject-after-change-hook**, it should call after the aproject change
 **project**.  
 You can read some files for current **project**.
 
