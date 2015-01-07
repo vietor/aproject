@@ -15,18 +15,19 @@ Add the following to your `init.el` (after the `aproject.el` in you load-path):
 (require "aproject")
 ```
 
-You can add custom process when aproject changed like:
+You can add custom process when current **project** changed like:
 
 ``` el
 (before-aproject-change
-(desktop-save aproject-storedir))
+  (desktop-save aproject-storedir))
 
 (after-aproject-change
-(setq desktop-path (list aproject-storedir))
-(desktop-read))
+  (setq desktop-path (list aproject-storedir))
+  (desktop-read)
+  (setq frame-title-format '("Emacs @ " aproject-rootdir)))
 ```
 
-Use the "-project" parameter to initialize the target director as project.
+Use the "-project" parameter to initialize the target director as **project**.
 
 ``` bash
 emacs -project ~/work/aproject
@@ -45,8 +46,8 @@ The aproject working directory.
 
 **aproject-storedir** (ReadOnly)
 
-The aproject store directory for store *project* specifec files.  
-Any project has itself store directory.
+The aproject store directory for store **project** specifec files.  
+Each **project** has itself store directory.
 
 Functions
 -------
@@ -59,9 +60,9 @@ Get file path in **aproject-rootdir**.
 
 Get file path in **aproject-storedir**
 
-** aproject-change-project () **
+**aproject-change-project ()**
 
-Change current project. It allows multiple project in one Emacs.
+Change current **project**. It allows multiple project in one Emacs.
 
 Macros
 -------
