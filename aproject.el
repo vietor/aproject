@@ -62,9 +62,12 @@
 (defun aproject-expand-dir-name (name &optional parent)
   "Convert directory NAME for aproject usage, PARENT start with if NAME is relative."
   (let ((s (expand-file-name name parent)))
-    (if (not (string-match "\/$" s))
-        (format "%s/" s)
-      s)))
+    (when (string-match "\/$" s)
+      (setq s (replace-match "" t t s)))
+    (when (and (eq system-type 'windows-nt)
+               (string-match "\:$" s))
+      (setq s (format "%s/" s)))
+    s))
 
 (defun aproject-parse-switch ()
   "Parse aproject switch from command line."
