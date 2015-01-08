@@ -59,6 +59,13 @@
   "Add hook to aproject-after-change-hook, in BODY."
   `(add-hook 'aproject-after-change-hook (lambda () ,@body)))
 
+(defun aproject-expand-dir-name (name &optional parent)
+  "Convert directory NAME for aproject usage, PARENT start with if NAME is relative"
+  (let ((s (expand-file-name name parent)))
+    (if (not (string-match "\/$" s))
+        (format "%s/" s)
+      s)))
+
 (defun aproject-parse-switch ()
   "Parse aproject switch from command line."
   (let ((active nil))
@@ -77,7 +84,7 @@
         (when (file-directory-p dir)
           (setq rootdir dir)
           (setq command-line-args (delete dir command-line-args)))))
-    (expand-file-name rootdir)))
+    (aproject-expand-dir-name rootdir)))
 
 (defun aproject-kill-buffers-switch-scratch ()
   "Kill all buffers and switch scratch buffer."
@@ -85,33 +92,38 @@
   (switch-to-buffer (get-buffer-create "*scratch*"))
   (mapc 'kill-buffer (cdr (buffer-list (current-buffer)))))
 
-(defun aproject-change-rootdir (rootdir &optional storedir)
-  "Change aproject's ROOTDIR directory, it can specific the STOREDIR."
+(defun aproject-change-rootdir (rootdir &optional force)
+  "Change aproject's ROOTDIR directory, initialize as *PROJECT* when FORCE is t."
   (unless (file-directory-p rootdir)
     (error "%s is not directory" rootdir))
-  (unless storedir
-    (setq storedir (expand-file-name aproject-dirname rootdir)))
-  (unless (file-directory-p storedir)
-    (make-directory storedir t))
-  (when (stringp aproject-storedir)
-    (run-hooks 'aproject-before-change-hook)
-    (aproject-kill-buffers-switch-scratch))
-  (cd rootdir)
-  (setq aproject-rootdir rootdir)
-  (setq aproject-storedir storedir)
-  (run-hooks 'aproject-after-change-hook))
+  (let ((storedir-exists nil)
+        (storedir (aproject-expand-dir-name aproject-dirname rootdir))
+        (storedir-global (aproject-expand-dir-name aproject-dirname (getenv "HOME"))))
+    (setq storedir-exists (file-directory-p storedir))
+    (when (and (not force) (not storedir-exists))
+      (setq storedir storedir-global)
+      (setq storedir-exists (file-directory-p storedir)))
+    (unless storedir-exists
+      (make-directory storedir t))
+    (when (stringp aproject-storedir)
+      (run-hooks 'aproject-before-change-hook)
+      (aproject-kill-buffers-switch-scratch))
+    (setq aproject-project
+          (not (eq
+                t
+                (compare-strings
+                 storedir nil nil
+                 storedir-global nil nil t))))
+    (cd rootdir)
+    (setq aproject-rootdir rootdir)
+    (setq aproject-storedir storedir)
+    (run-hooks 'aproject-after-change-hook)))
 
 (defun aproject-auto-initialize ()
   "Auto initialize the aproject environment."
-  (let* ((switch (aproject-parse-switch))
-         (rootdir (aproject-parse-rootdir))
-         (storedir (expand-file-name aproject-dirname rootdir)))
-    (when (file-directory-p storedir)
-      (setq switch t))
-    (if switch
-        (setq aproject-project t)
-      (setq storedir (expand-file-name aproject-dirname user-emacs-directory)))
-    (aproject-change-rootdir rootdir storedir)))
+  (let ((force (aproject-parse-switch))
+        (rootdir (aproject-parse-rootdir)))
+    (aproject-change-rootdir rootdir force)))
 
 (add-hook 'after-init-hook 'aproject-auto-initialize)
 
@@ -123,13 +135,12 @@
     (when (or (equal "" rootdir)
               (not (file-accessible-directory-p rootdir)))
       (error "You not have permission to open directory"))
-    (when (string-match "\/$" rootdir)
-      (setq rootdir (replace-match "" t t rootdir)))
+    (setq rootdir (aproject-expand-dir-name rootdir))
     (let ((len (length aproject-rootdir)))
       (when (and aproject-project
                  (eq t (compare-strings aproject-rootdir 0 len rootdir 0 len t)))
         (error "You need change to difference project directory")))
-    (aproject-change-rootdir rootdir)))
+    (aproject-change-rootdir rootdir t)))
 
 (provide 'aproject)
 ;;; aproject.el ends here
