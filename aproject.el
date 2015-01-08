@@ -60,7 +60,7 @@
   `(add-hook 'aproject-after-change-hook (lambda () ,@body)))
 
 (defun aproject-expand-dir-name (name &optional parent)
-  "Convert directory NAME for aproject usage, PARENT start with if NAME is relative"
+  "Convert directory NAME for aproject usage, PARENT start with if NAME is relative."
   (let ((s (expand-file-name name parent)))
     (if (not (string-match "\/$" s))
         (format "%s/" s)
@@ -131,7 +131,7 @@
   "Change current project."
   (interactive)
   (let (rootdir)
-    (setq rootdir (read-directory-name "Change to project directory: "))
+    (setq rootdir (read-directory-name "Change to project directory: " aproject-rootdir))
     (when (or (equal "" rootdir)
               (not (file-accessible-directory-p rootdir)))
       (error "You not have permission to open directory"))
