@@ -38,6 +38,8 @@
   "The aproject's working directory.")
 (defvar aproject-storedir nil
   "The aproject's store directory.")
+(defvar aproject-init-hook nil
+  "Hooks to run in aproject init.")
 (defvar aproject-before-change-hook nil
   "Hooks to run before aproject changed.")
 (defvar aproject-after-change-hook nil
@@ -50,6 +52,10 @@
 (defun aproject-store-file (name)
   "Get the aproject's store directory NAME file."
   (expand-file-name name aproject-storedir))
+
+(defmacro add-aproject-init (&rest body)
+  "Add hook to aproject-init-hook, in BODY."
+  `(add-hook 'aproject-init-hook (lambda () ,@body)))
 
 (defmacro before-aproject-change (&rest body)
   "Add hook to aproject-before-change-hook, in BODY."
@@ -124,6 +130,7 @@
 
 (defun aproject-auto-initialize ()
   "Auto initialize the aproject environment."
+  (run-hooks 'aproject-init-hook)
   (let ((force (aproject-parse-switch))
         (rootdir (aproject-parse-rootdir)))
     (aproject-change-rootdir rootdir force)))

@@ -18,6 +18,10 @@ Add the following to your `init.el` (after the `aproject.el` in you load-path):
 You can add custom process when current **project** changed like:
 
 ``` el
+(add-aproject-init
+  (setq desktop-save t
+    desktop-load-locked-desktop t))
+
 (before-aproject-change
   (desktop-save aproject-storedir))
 
@@ -66,6 +70,11 @@ Change current **project**. It allows multiple project in one Emacs.
 
 Macros
 -------
+
+**add-aproject-init**
+
+Wrap **aproject-init-hook**, it should call when aproject initialize.  
+The aproject was Initialized only once in **after-init-hook**.
 
 **before-aproject-change**
 
