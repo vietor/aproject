@@ -1,10 +1,10 @@
 aproject
 ========
 
-A simple project tool for Emacs.
+A simple project framework for Emacs.
 
 This library allows the user to use Emacs on multiple projects.  
-Any project has it's ".aproject" dirctory for store some files, like: session, desktop, etc.
+Each project has it's ".aproject" dirctory for store some files, like: bookmarks, desktop, etc.
 
 Usage
 -----
@@ -19,8 +19,8 @@ You can add custom process when current **project** changed like:
 
 ``` el
 (add-aproject-init
-  (setq desktop-save t
-    desktop-load-locked-desktop t))
+  (setq desktop-save t)
+  (desktop-save-mode 1))
 
 (before-aproject-change
   (desktop-save aproject-storedir))
@@ -87,6 +87,25 @@ You can store some files for previous **project**.
 Wrap **aproject-after-change-hook**, it should call after the aproject change
 **project**.  
 You can read some files for current **project**.
+
+Plugin Variables
+-------
+
+**aproject-plugin-bookmark**
+
+Enable **bookmark** support, default t.
+
+**aproject-plugin-recentf**
+
+Enable **recentf** support, default t.
+
+**aproject-plugin-ido**
+
+Enable **ido** support, default t.
+
+**aproject-plugin-desktop**
+
+Enable **desktop** support, default t.
 
 License
 -------

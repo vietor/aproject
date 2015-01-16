@@ -1,4 +1,4 @@
-;;; aproject.el --- A simple project tool for Emacs
+;;; aproject.el --- A simple project framework for Emacs
 
 ;; Copyright (C) 2015 Vietor Liu
 
@@ -25,8 +25,8 @@
 ;;; Commentary:
 
 ;; This library allows the user to use Emacs on multiple projects.
-;; Any project has it's ".aproject" dirctory for store some files,
-;; like: session, desktop, etc.
+;; Each project has it's ".aproject" dirctory for store some files,
+;; like: bookmarks, desktop, etc.
 
 ;;; Code:
 
@@ -65,49 +65,17 @@
   "Add hook to aproject-after-change-hook, in BODY."
   `(add-hook 'aproject-after-change-hook (lambda () ,@body)))
 
-(defun aproject-expand-dir-name (name &optional parent)
+(defun aproject--expand-dirname (name &optional parent)
   "Convert directory NAME for aproject usage, PARENT start with if NAME is relative."
-  (let ((s (expand-file-name name parent)))
-    (when (string-match "\/$" s)
-      (setq s (replace-match "" t t s)))
-    (when (and (eq system-type 'windows-nt)
-               (string-match "\:$" s))
-      (setq s (format "%s/" s)))
-    s))
+  (directory-file-name (expand-file-name name parent)))
 
-(defun aproject-parse-switch ()
-  "Parse aproject switch from command line."
-  (let ((active nil))
-    (when (member "-project" command-line-args)
-      (setq active t)
-      (setq command-line-args (delete "-project" command-line-args)))
-    active))
-
-(defun aproject-parse-rootdir ()
-  "Parse rootdir directory from command line or use environment $PWD or $HOME."
-  (let ((rootdir (getenv "PWD")))
-    (unless rootdir
-      (setq rootdir (getenv "HOME")))
-    (when (> (length command-line-args) 1)
-      (let ((dir (elt command-line-args (- (length command-line-args) 1))))
-        (when (file-directory-p dir)
-          (setq rootdir dir)
-          (setq command-line-args (delete dir command-line-args)))))
-    (aproject-expand-dir-name rootdir)))
-
-(defun aproject-kill-buffers-switch-scratch ()
-  "Kill all buffers and switch scratch buffer."
-  (delete-other-windows)
-  (switch-to-buffer (get-buffer-create "*scratch*"))
-  (mapc 'kill-buffer (cdr (buffer-list (current-buffer)))))
-
-(defun aproject-change-rootdir (rootdir &optional force)
+(defun aproject--change-rootdir (rootdir &optional force)
   "Change aproject's ROOTDIR directory, initialize as *PROJECT* when FORCE is t."
   (unless (file-directory-p rootdir)
     (error "%s is not directory" rootdir))
   (let ((storedir-exists nil)
-        (storedir (aproject-expand-dir-name aproject-dirname rootdir))
-        (storedir-global (aproject-expand-dir-name aproject-dirname (getenv "HOME"))))
+        (storedir (aproject--expand-dirname aproject-dirname rootdir))
+        (storedir-global (aproject--expand-dirname aproject-dirname (getenv "HOME"))))
     (setq storedir-exists (file-directory-p storedir))
     (when (and (not force) (not storedir-exists))
       (setq storedir storedir-global)
@@ -116,26 +84,20 @@
       (make-directory storedir t))
     (when (stringp aproject-storedir)
       (run-hooks 'aproject-before-change-hook)
-      (aproject-kill-buffers-switch-scratch))
+      ;; Kill all buffers and switch scratch buffer
+      (delete-other-windows)
+      (switch-to-buffer (get-buffer-create "*scratch*"))
+      (mapc 'kill-buffer (cdr (buffer-list (current-buffer)))))
+    (cd rootdir)
     (setq aproject-project
           (not (eq
                 t
                 (compare-strings
                  storedir nil nil
                  storedir-global nil nil t))))
-    (cd rootdir)
     (setq aproject-rootdir rootdir)
     (setq aproject-storedir storedir)
     (run-hooks 'aproject-after-change-hook)))
-
-(defun aproject-auto-initialize ()
-  "Auto initialize the aproject environment."
-  (run-hooks 'aproject-init-hook)
-  (let ((force (aproject-parse-switch))
-        (rootdir (aproject-parse-rootdir)))
-    (aproject-change-rootdir rootdir force)))
-
-(add-hook 'after-init-hook 'aproject-auto-initialize)
 
 (defun aproject-change-project ()
   "Change current project."
@@ -145,12 +107,120 @@
     (when (or (equal "" rootdir)
               (not (file-accessible-directory-p rootdir)))
       (error "You not have permission to open directory"))
-    (setq rootdir (aproject-expand-dir-name rootdir))
+    (setq rootdir (aproject--expand-dirname rootdir))
     (let ((len (length aproject-rootdir)))
       (when (and aproject-project
                  (eq t (compare-strings aproject-rootdir 0 len rootdir 0 len t)))
         (error "You need change to difference project directory")))
-    (aproject-change-rootdir rootdir t)))
+    (aproject--change-rootdir rootdir t)))
+
+(defun aproject--initialize ()
+  "Initialize aproject environment."
+  (let ((aproject--init-switch nil)
+        (aproject--init-rootdir nil))
+    ;; Parse parameter from command line
+    (when (member "-project" command-line-args)
+      (setq aproject--init-switch t)
+      (setq command-line-args (delete "-project" command-line-args)))
+    (when (> (length command-line-args) 1)
+      ;; Ignore multiple dirname from command line
+      (let ((dir (elt command-line-args (- (length command-line-args) 1))))
+        (when (file-directory-p dir)
+          (setq aproject--init-rootdir dir)
+          (setq command-line-args (delete dir command-line-args)))))
+    (unless aproject--init-rootdir
+      (setq aproject--init-rootdir (or  (getenv "PWD") (getenv "HOME"))))
+    (setq aproject--init-rootdir
+          (aproject--expand-dirname aproject--init-rootdir))
+    (run-hooks 'aproject-init-hook)
+    (aproject--change-rootdir aproject--init-rootdir
+                              aproject--init-switch)))
+
+(add-hook 'after-init-hook 'aproject--initialize)
+
+;;; Plugins:
+
+;; For bookmark
+;;
+(require 'bookmark)
+
+(defvar aproject-plugin-bookmark t
+  "Plugin for bookmark.")
+
+(before-aproject-change
+ (when aproject-plugin-bookmark
+   (bookmark-save)))
+
+(after-aproject-change
+ (when aproject-plugin-bookmark
+   (setq bookmark-default-file
+         (aproject-store-file "bookmarks"))
+   (ignore-errors
+     (bookmark-load bookmark-default-file t t))))
+
+;; For recentf
+;;
+(require 'recentf)
+
+(defvar aproject-plugin-recentf t
+  "Plugin for recentf.")
+
+(add-aproject-init
+ (when aproject-plugin-recentf
+   (recentf-mode 1)
+   (setq recentf-max-menu-items 64)
+   (setq recentf-exclude (list ".*\.aproject.*"))))
+
+(before-aproject-change
+ (when aproject-plugin-recentf
+   (recentf-save-list)))
+
+(after-aproject-change
+ (when aproject-plugin-recentf
+   (setq recentf-save-file
+         (aproject-store-file "recentf"))
+   (recentf-load-list)))
+
+;; For ido
+;;
+(require 'ido)
+
+(defvar aproject-plugin-ido t
+  "Plugin for ido.")
+
+(before-aproject-change
+ (when aproject-plugin-ido
+   (ido-save-history)))
+
+(after-aproject-change
+ (when aproject-plugin-ido
+   (setq ido-save-directory-list-file
+         (aproject-store-file "ido"))
+   (ido-load-history t)))
+
+;; For desktop
+;;
+(require 'desktop)
+
+(defvar aproject-plugin-desktop t
+  "Plugin for desktop.")
+
+(add-aproject-init
+ (when aproject-plugin-desktop
+   (setq desktop-save t
+         desktop-load-locked-desktop t
+         desktop-base-file-name "desktop")
+   (desktop-save-mode 1)))
+
+(before-aproject-change
+ (when aproject-plugin-desktop
+   (desktop-save aproject-storedir)))
+
+(after-aproject-change
+ (when aproject-plugin-desktop
+   (setq desktop-path
+         (list aproject-storedir))
+   (desktop-read)))
 
 (provide 'aproject)
 ;;; aproject.el ends here
