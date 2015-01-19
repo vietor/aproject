@@ -30,6 +30,11 @@
 
 ;;; Code:
 
+(defgroup aproject nil
+  "Simple project framework."
+  :group 'environment
+  :prefix "aproject-")
+
 (defconst aproject-dirname ".aproject")
 
 (defvar aproject-project nil
@@ -53,14 +58,17 @@
   "Get the aproject's store directory NAME file."
   (expand-file-name name aproject-storedir))
 
+;;;###autoload
 (defmacro add-aproject-init (&rest body)
   "Add hook to aproject-init-hook, in BODY."
   `(add-hook 'aproject-init-hook (lambda () ,@body)))
 
+;;;###autoload
 (defmacro before-aproject-change (&rest body)
   "Add hook to aproject-before-change-hook, in BODY."
   `(add-hook 'aproject-before-change-hook (lambda () ,@body)))
 
+;;;###autoload
 (defmacro after-aproject-change (&rest body)
   "Add hook to aproject-after-change-hook, in BODY."
   `(add-hook 'aproject-after-change-hook (lambda () ,@body)))
@@ -99,6 +107,7 @@
     (setq aproject-storedir storedir)
     (run-hooks 'aproject-after-change-hook)))
 
+;;;###autoload
 (defun aproject-change-project ()
   "Change current project."
   (interactive)
@@ -144,7 +153,7 @@
 ;;
 (require 'bookmark)
 
-(defvar aproject-plugin-bookmark t
+(defcustom aproject-plugin-bookmark t
   "Plugin for bookmark.")
 
 (before-aproject-change
@@ -162,7 +171,7 @@
 ;;
 (require 'recentf)
 
-(defvar aproject-plugin-recentf t
+(defcustom aproject-plugin-recentf t
   "Plugin for recentf.")
 
 (add-aproject-init
@@ -185,7 +194,7 @@
 ;;
 (require 'ido)
 
-(defvar aproject-plugin-ido t
+(defcustom aproject-plugin-ido t
   "Plugin for ido.")
 
 (before-aproject-change
@@ -202,7 +211,7 @@
 ;;
 (require 'desktop)
 
-(defvar aproject-plugin-desktop t
+(defcustom aproject-plugin-desktop t
   "Plugin for desktop.")
 
 (add-aproject-init

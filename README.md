@@ -88,7 +88,7 @@ Wrap **aproject-after-change-hook**, it should call after the aproject change
 **project**.  
 You can read some files for current **project**.
 
-Plugin Variables
+Customize Variables
 -------
 
 **aproject-plugin-bookmark**
