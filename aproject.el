@@ -119,7 +119,9 @@
     (setq rootdir (aproject--expand-dirname rootdir))
     (let ((len (length aproject-rootdir)))
       (when (and aproject-project
-                 (eq t (compare-strings aproject-rootdir 0 len rootdir 0 len t)))
+                 (eq t (compare-strings
+                        (concat rootdir "/") 0 (1+ len)
+                        (concat aproject-rootdir "/") 0 (1+ len) t)))
         (error "You need change to difference project directory")))
     (aproject--change-rootdir rootdir t)))
 
