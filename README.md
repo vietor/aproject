@@ -1,3 +1,5 @@
+[![MELPA](http://melpa.org/packages/aproject-badge.svg)](http://melpa.org/#/aproject)
+
 aproject
 ========
 
