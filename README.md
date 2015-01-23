@@ -1,12 +1,13 @@
 [![MELPA](http://melpa.org/packages/aproject-badge.svg)](http://melpa.org/#/aproject)
+[![MELPA Stable](http://stable.melpa.org/packages/aproject-badge.svg)](http://stable.melpa.org/#/aproject)
 
 aproject
 ========
 
-A simple project framework for Emacs.
+Basic project framework for Emacs.
 
 This library allows the user to use Emacs on multiple projects.  
-Each project has it's ".aproject" dirctory for store some files, like: bookmarks, desktop, etc.
+Each project has it's ".aproject" directory for store some files, like: bookmarks, desktop, etc.
 
 Usage
 -----

@@ -1,4 +1,4 @@
-;;; aproject.el --- A simple project framework for Emacs
+;;; aproject.el --- Basic project framework for Emacs
 
 ;; Copyright (C) 2015 Vietor Liu
 
@@ -25,7 +25,7 @@
 ;;; Commentary:
 
 ;; This library allows the user to use Emacs on multiple projects.
-;; Each project has it's ".aproject" dirctory for store some files,
+;; Each project has it's ".aproject" directory for store some files,
 ;; like: bookmarks, desktop, etc.
 
 ;;; Code:
@@ -219,6 +219,7 @@
 (add-aproject-init
  (when aproject-plugin-desktop
    (setq desktop-save t
+         desktop-restore-frames nil
          desktop-load-locked-desktop t
          desktop-base-file-name "desktop")
    (desktop-save-mode 1)))
