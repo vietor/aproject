@@ -149,90 +149,12 @@
 
 (add-hook 'after-init-hook 'aproject--initialize)
 
-;;; Plugins:
-
-;; For bookmark
-;;
-(require 'bookmark)
-
-(defcustom aproject-plugin-bookmark t
-  "Plugin for bookmark.")
-
-(before-aproject-change
- (when aproject-plugin-bookmark
-   (bookmark-save)))
-
-(after-aproject-change
- (when aproject-plugin-bookmark
-   (setq bookmark-default-file
-         (aproject-store-file "bookmarks"))
-   (ignore-errors
-     (bookmark-load bookmark-default-file t t))))
-
-;; For recentf
-;;
-(require 'recentf)
-
-(defcustom aproject-plugin-recentf t
-  "Plugin for recentf.")
-
-(add-aproject-init
- (when aproject-plugin-recentf
-   (recentf-mode 1)
-   (setq recentf-max-menu-items 64)
-   (setq recentf-exclude (list ".*\.aproject.*"))))
-
-(before-aproject-change
- (when aproject-plugin-recentf
-   (recentf-save-list)))
-
-(after-aproject-change
- (when aproject-plugin-recentf
-   (setq recentf-save-file
-         (aproject-store-file "recentf"))
-   (recentf-load-list)))
-
-;; For ido
-;;
-(require 'ido)
-
-(defcustom aproject-plugin-ido t
-  "Plugin for ido.")
-
-(before-aproject-change
- (when aproject-plugin-ido
-   (ido-save-history)))
-
-(after-aproject-change
- (when aproject-plugin-ido
-   (setq ido-save-directory-list-file
-         (aproject-store-file "ido"))
-   (ido-load-history t)))
-
-;; For desktop
-;;
-(require 'desktop)
-
-(defcustom aproject-plugin-desktop t
-  "Plugin for desktop.")
-
-(add-aproject-init
- (when aproject-plugin-desktop
-   (setq desktop-save t
-         desktop-restore-frames nil
-         desktop-load-locked-desktop t
-         desktop-base-file-name "desktop")
-   (desktop-save-mode 1)))
-
-(before-aproject-change
- (when aproject-plugin-desktop
-   (desktop-save aproject-storedir)))
-
-(after-aproject-change
- (when aproject-plugin-desktop
-   (setq desktop-path
-         (list aproject-storedir))
-   (desktop-read)))
-
 (provide 'aproject)
+
+;; rest of aproject core
+(require 'aproject-bookmark)
+(require 'aproject-recentf)
+(require 'aproject-ido)
+(require 'aproject-desktop)
+
 ;;; aproject.el ends here
