@@ -30,7 +30,8 @@
 (require 'bookmark)
 
 (defcustom aproject-plugin-bookmark t
-  "Plugin for bookmark.")
+  "Plugin for bookmark."
+  :group 'aproject)
 
 (before-aproject-change
  (when aproject-plugin-bookmark

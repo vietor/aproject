@@ -30,7 +30,8 @@
 (require 'ido)
 
 (defcustom aproject-plugin-ido t
-  "Plugin for ido.")
+  "Plugin for ido."
+  :group 'aproject)
 
 (before-aproject-change
  (when aproject-plugin-ido

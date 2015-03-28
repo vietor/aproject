@@ -30,7 +30,8 @@
 (require 'desktop)
 
 (defcustom aproject-plugin-desktop t
-  "Plugin for desktop.")
+  "Plugin for desktop."
+  :group 'aproject)
 
 (add-aproject-init
  (when aproject-plugin-desktop

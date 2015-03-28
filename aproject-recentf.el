@@ -30,7 +30,8 @@
 (require 'recentf)
 
 (defcustom aproject-plugin-recentf t
-  "Plugin for recentf.")
+  "Plugin for recentf."
+  :group 'aproject)
 
 (add-aproject-init
  (when aproject-plugin-recentf
