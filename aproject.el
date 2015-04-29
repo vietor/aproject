@@ -45,6 +45,8 @@
   "The aproject's store directory.")
 (defvar aproject-init-hook nil
   "Hooks to run in aproject init.")
+(defvar aproject-after-init-hook nil
+  "Hooks to run after aproject init, *PRIVATE*.")
 (defvar aproject-before-change-hook nil
   "Hooks to run before aproject changed.")
 (defvar aproject-after-change-hook nil
@@ -144,6 +146,7 @@
     (setq aproject--init-rootdir
           (aproject--expand-dirname aproject--init-rootdir))
     (run-hooks 'aproject-init-hook)
+    (run-hooks 'aproject-after-init-hook)
     (aproject--change-rootdir aproject--init-rootdir
                               aproject--init-switch)))
 
@@ -156,5 +159,6 @@
 (require 'aproject-recentf)
 (require 'aproject-ido)
 (require 'aproject-desktop)
+(require 'aproject-environ)
 
 ;;; aproject.el ends here
