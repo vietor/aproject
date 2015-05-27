@@ -51,6 +51,8 @@
   "Hooks to run before aproject changed.")
 (defvar aproject-after-change-hook nil
   "Hooks to run after aproject changed.")
+(defvar aproject-after-after-change-hook nil
+  "Hooks to run after the after aproject changed.")
 
 (defun aproject-root-file (name)
   "Get the aproject's workding directory NAME file."
@@ -74,6 +76,11 @@
 (defmacro after-aproject-change (&rest body)
   "Add hook to aproject-after-change-hook, in BODY."
   `(add-hook 'aproject-after-change-hook (lambda () ,@body)))
+
+;;;###autoload
+(defmacro after-after-aproject-change (&rest body)
+  "Add hook to aproject-after-after-change-hook, in BODY."
+  `(add-hook 'aproject-after-after-change-hook (lambda () ,@body)))
 
 (defun aproject--expand-dirname (name &optional parent)
   "Convert directory NAME for aproject usage, PARENT start with if NAME is relative."
@@ -107,7 +114,8 @@
                  storedir-global nil nil t))))
     (setq aproject-rootdir rootdir)
     (setq aproject-storedir storedir)
-    (run-hooks 'aproject-after-change-hook)))
+    (run-hooks 'aproject-after-change-hook)
+    (run-hooks 'aproject-after-after-change-hook)))
 
 ;;;###autoload
 (defun aproject-change-project ()

@@ -69,7 +69,7 @@
  (when aproject-plugin-environ
    (aproject--restore-environ)))
 
-(after-aproject-change
+(after-after-aproject-change
  (run-hooks 'aproject-after-environ-change-hook))
 
 (provide 'aproject-environ)
