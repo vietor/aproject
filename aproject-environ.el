@@ -28,7 +28,7 @@
 
 (require 'aproject)
 
-(defcustom aproject-plugin-environ nil
+(defcustom aproject-plugin-environ t
   "Plugin for Environment."
   :group 'aproject)
 
