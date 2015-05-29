@@ -45,14 +45,17 @@
   "The aproject's store directory.")
 (defvar aproject-init-hook nil
   "Hooks to run in aproject init.")
-(defvar aproject-after-init-hook nil
-  "Hooks to run after aproject init, *PRIVATE*.")
 (defvar aproject-before-change-hook nil
   "Hooks to run before aproject changed.")
 (defvar aproject-after-change-hook nil
   "Hooks to run after aproject changed.")
+
+(defvar aproject-after-init-hook nil
+  "Hooks to run after aproject init, *PRIVATE*.")
+(defvar aproject-after-before-change-hook nil
+  "Hooks to run after the before aproject changed, *PRIVATE*.")
 (defvar aproject-after-after-change-hook nil
-  "Hooks to run after the after aproject changed.")
+  "Hooks to run after the after aproject changed, *PRIVATE*.")
 
 (defun aproject-root-file (name)
   "Get the aproject's workding directory NAME file."
@@ -77,11 +80,6 @@
   "Add hook to aproject-after-change-hook, in BODY."
   `(add-hook 'aproject-after-change-hook (lambda () ,@body)))
 
-;;;###autoload
-(defmacro after-after-aproject-change (&rest body)
-  "Add hook to aproject-after-after-change-hook, in BODY."
-  `(add-hook 'aproject-after-after-change-hook (lambda () ,@body)))
-
 (defun aproject--expand-dirname (name &optional parent)
   "Convert directory NAME for aproject usage, PARENT start with if NAME is relative."
   (directory-file-name (expand-file-name name parent)))
@@ -101,6 +99,7 @@
       (make-directory storedir t))
     (when (stringp aproject-storedir)
       (run-hooks 'aproject-before-change-hook)
+      (run-hooks 'aproject-after-before-change-hook)
       ;; Kill all buffers and switch scratch buffer
       (delete-other-windows)
       (switch-to-buffer (get-buffer-create "*scratch*"))

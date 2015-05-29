@@ -31,7 +31,8 @@
 (defcustom aproject-plugin-environ nil
   "Plugin for Environment."
   :group 'aproject)
-(defvar aproject-after-environ-change-hook nil
+
+(defvar aproject-environ-change-hook nil
   "Hooks to run after aproject environ changed.")
 
 (defvar aproject--origin-exec-path ""
@@ -65,12 +66,15 @@
             (setq aproject--origin-exec-path exec-path)
             (setq aproject--origin-environment (aproject--process-environment))))
 
-(before-aproject-change
- (when aproject-plugin-environ
-   (aproject--restore-environ)))
+(add-hook 'aproject-after-before-change-hook
+          (lambda ()
+            (when aproject-plugin-environ
+              (aproject--restore-environ))))
 
-(after-after-aproject-change
- (run-hooks 'aproject-after-environ-change-hook))
+(add-hook 'aproject-after-after-change-hook
+          (lambda ()
+            (when aproject-plugin-environ
+              (run-hooks 'aproject-environ-change-hook))))
 
 (provide 'aproject-environ)
 ;;; aproject-environ.el ends here
