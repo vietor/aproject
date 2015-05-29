@@ -112,7 +112,8 @@ Enable **desktop** support, default t.
 
 **aproject-plugin-environ**
 
-Enable **environments** support, default t.
+Enable **environments** support, default t.  
+Hook **aproject-environ-change-hook** for **project environments** was changed
 
 License
 -------
