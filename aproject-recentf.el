@@ -27,7 +27,9 @@
 ;;; Code:
 
 (require 'aproject)
-(require 'recentf)
+(eval-when-compile
+  (require 'ido)
+  (require 'recentf))
 
 (defcustom aproject-plugin-recentf t
   "Plugin for recentf."
@@ -48,6 +50,17 @@
    (setq recentf-save-file
          (aproject-store-file "recentf"))
    (recentf-load-list)))
+
+(defalias 'aproject-recentf-view
+  (symbol-function 'recentf-open-files))
+
+;;;###autoload
+(defun aproject-recentf-open ()
+  "Use `ido-completing-read' to \\[find-file] a recent file."
+  (interactive)
+  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+      (message "Opening file...")
+    (message "Aborting")))
 
 (provide 'aproject-recentf)
 ;;; aproject-recentf.el ends here

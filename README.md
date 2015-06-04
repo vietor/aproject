@@ -100,7 +100,9 @@ Enable **bookmark** support, default t.
 
 **aproject-plugin-recentf**
 
-Enable **recentf** support, default t.
+Enable **recentf** support, default t.  
+Function **aproject-recentf-open** for fast open recent files.
+Function **aproject-recentf-view** for view recent files.
 
 **aproject-plugin-ido**
 

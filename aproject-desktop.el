@@ -27,7 +27,8 @@
 ;;; Code:
 
 (require 'aproject)
-(require 'desktop)
+(eval-when-compile
+  (require 'desktop))
 
 (defcustom aproject-plugin-desktop t
   "Plugin for desktop."
@@ -37,6 +38,7 @@
  (when aproject-plugin-desktop
    (setq desktop-save t
          desktop-restore-frames nil
+         desktop-auto-save-timeout 600
          desktop-load-locked-desktop t
          desktop-base-file-name "desktop")
    (desktop-save-mode 1)))
