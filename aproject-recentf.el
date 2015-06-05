@@ -27,9 +27,8 @@
 ;;; Code:
 
 (require 'aproject)
-(eval-when-compile
-  (require 'ido)
-  (require 'recentf))
+(require 'ido)
+(require 'recentf)
 
 (defcustom aproject-plugin-recentf t
   "Plugin for recentf."

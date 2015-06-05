@@ -27,8 +27,7 @@
 ;;; Code:
 
 (require 'aproject)
-(eval-when-compile
-  (require 'desktop))
+(require 'desktop)
 
 (defcustom aproject-plugin-desktop t
   "Plugin for desktop."

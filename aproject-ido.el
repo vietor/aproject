@@ -27,8 +27,7 @@
 ;;; Code:
 
 (require 'aproject)
-(eval-when-compile
-  (require 'ido))
+(require 'ido)
 
 (defcustom aproject-plugin-ido t
   "Plugin for ido."

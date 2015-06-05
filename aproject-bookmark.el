@@ -27,8 +27,7 @@
 ;;; Code:
 
 (require 'aproject)
-(eval-when-compile
-  (require 'bookmark))
+(require 'bookmark)
 
 (defcustom aproject-plugin-bookmark t
   "Plugin for bookmark."
