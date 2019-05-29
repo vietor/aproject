@@ -37,7 +37,6 @@
 (add-aproject-init
  (when aproject-plugin-recentf
    (recentf-mode 1)
-   (setq recentf-max-menu-items 64)
    (setq recentf-exclude (list ".*\.aproject.*"))))
 
 (before-aproject-change
