@@ -139,9 +139,9 @@
   (let ((aproject--init-switch nil)
         (aproject--init-rootdir nil))
     ;; Parse parameter from command line
-    (when (member "-project" command-line-args)
+    (when (member "--aproject" command-line-args)
       (setq aproject--init-switch t)
-      (setq command-line-args (delete "-project" command-line-args)))
+      (setq command-line-args (delete "--aproject" command-line-args)))
     (when (> (length command-line-args) 1)
       ;; Ignore multiple dirname from command line
       (let ((dir (elt command-line-args (- (length command-line-args) 1))))
