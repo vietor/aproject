@@ -1,6 +1,6 @@
 ;;; aproject-ido.el --- Ido plugin for aproject
 
-;; Copyright (C) 2015 Vietor Liu
+;; Copyright (C) 2015-2019 Vietor Liu
 
 ;; Author: Vietor Liu <vietor.liu@gmail.com>
 ;; Package: aproject
@@ -29,7 +29,7 @@
 (require 'aproject)
 (require 'ido)
 
-(defcustom aproject-plugin-ido t
+(defcustom aproject-plugin-ido nil
   "Plugin for ido."
   :group 'aproject)
 

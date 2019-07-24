@@ -1,6 +1,6 @@
 ;;; aproject-desktop.el --- Desktop plugin for aproject
 
-;; Copyright (C) 2015 Vietor Liu
+;; Copyright (C) 2015-2019 Vietor Liu
 
 ;; Author: Vietor Liu <vietor.liu@gmail.com>
 ;; Package: aproject

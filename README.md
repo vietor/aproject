@@ -94,6 +94,10 @@ You can read some files for current **project**.
 Builtin Plugins
 -------
 
+**aproject-plugin-desktop**
+
+Enable **desktop** support, default t.
+
 **aproject-plugin-bookmark**
 
 Enable **bookmark** support, default t.
@@ -106,15 +110,11 @@ Function **aproject-recentf-view** for view recent files.
 
 **aproject-plugin-ido**
 
-Enable **ido** support, default t.
-
-**aproject-plugin-desktop**
-
-Enable **desktop** support, default t.
+Enable **ido** support, default nil.
 
 **aproject-plugin-environ**
 
-Enable **environments** support, default t.  
+Enable **environments** support, default nil.  
 Hook **aproject-environ-change-hook** for **project environments** was changed
 
 License

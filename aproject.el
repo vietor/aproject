@@ -1,6 +1,6 @@
 ;;; aproject.el --- Basic project framework for Emacs
 
-;; Copyright (C) 2015 Vietor Liu
+;; Copyright (C) 2015-2019 Vietor Liu
 
 ;; Author: Vietor Liu <vietor.liu@gmail.com>
 ;; Keywords: environment project
