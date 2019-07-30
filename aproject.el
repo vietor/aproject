@@ -37,8 +37,8 @@
 
 (defconst aproject-dirname ".aproject")
 
-(defvar aproject-project nil
-  "The flag for aproject initialize as *PROJECT*.")
+(defvar aproject-alive nil
+  "The flag for aproject initialized.")
 (defvar aproject-rootdir nil
   "The aproject's working directory.")
 (defvar aproject-storedir nil
@@ -105,7 +105,7 @@
       (switch-to-buffer (get-buffer-create "*scratch*"))
       (mapc 'kill-buffer (cdr (buffer-list (current-buffer)))))
     (cd rootdir)
-    (setq aproject-project
+    (setq aproject-alive
           (not (eq
                 t
                 (compare-strings
@@ -127,7 +127,7 @@
       (error "You not have permission to open directory"))
     (setq rootdir (aproject--expand-dirname rootdir))
     (let ((len (length aproject-rootdir)))
-      (when (and aproject-project
+      (when (and aproject-alive
                  (eq t (compare-strings
                         (concat rootdir "/") 0 (1+ len)
                         (concat aproject-rootdir "/") 0 (1+ len) t)))

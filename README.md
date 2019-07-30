@@ -43,7 +43,7 @@ emacs -project ~/work/aproject
 Variables
 -------
 
-**aproject-project** (ReadOnly)
+**aproject-alive** (ReadOnly)
 
 If aproject initialize like a **project** that is t else nil.
 
