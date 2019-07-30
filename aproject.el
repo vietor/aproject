@@ -50,12 +50,12 @@
 (defvar aproject-after-change-hook nil
   "Hooks to run after aproject changed.")
 
-(defvar aproject-after-init-hook nil
-  "Hooks to run after aproject init, *PRIVATE*.")
-(defvar aproject-after-before-change-hook nil
-  "Hooks to run after the before aproject changed, *PRIVATE*.")
-(defvar aproject-after-after-change-hook nil
-  "Hooks to run after the after aproject changed, *PRIVATE*.")
+(defvar aproject--after-init-hook nil
+  "Hooks to run after aproject init.")
+(defvar aproject--after-before-change-hook nil
+  "Hooks to run after the before aproject changed.")
+(defvar aproject--after-after-change-hook nil
+  "Hooks to run after the after aproject changed.")
 
 (defun aproject-root-file (name)
   "Get the aproject's workding directory NAME file."
@@ -99,7 +99,7 @@
       (make-directory storedir t))
     (when (stringp aproject-storedir)
       (run-hooks 'aproject-before-change-hook)
-      (run-hooks 'aproject-after-before-change-hook)
+      (run-hooks 'aproject--after-before-change-hook)
       ;; Kill all buffers and switch scratch buffer
       (delete-other-windows)
       (switch-to-buffer (get-buffer-create "*scratch*"))
@@ -114,7 +114,7 @@
     (setq aproject-rootdir rootdir)
     (setq aproject-storedir storedir)
     (run-hooks 'aproject-after-change-hook)
-    (run-hooks 'aproject-after-after-change-hook)))
+    (run-hooks 'aproject--after-after-change-hook)))
 
 ;;;###autoload
 (defun aproject-change-project ()
@@ -153,7 +153,7 @@
     (setq aproject--init-rootdir
           (aproject--expand-dirname aproject--init-rootdir))
     (run-hooks 'aproject-init-hook)
-    (run-hooks 'aproject-after-init-hook)
+    (run-hooks 'aproject--after-init-hook)
     (aproject--change-rootdir aproject--init-rootdir
                               aproject--init-switch)))
 

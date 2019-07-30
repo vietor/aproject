@@ -61,17 +61,17 @@
       (when (not (assoc (car item) aproject--origin-environment))
         (setenv (car item) nil)))))
 
-(add-hook 'aproject-after-init-hook
+(add-hook 'aproject--after-init-hook
           (lambda ()
             (setq aproject--origin-exec-path exec-path)
             (setq aproject--origin-environment (aproject--process-environment))))
 
-(add-hook 'aproject-after-before-change-hook
+(add-hook 'aproject--after-before-change-hook
           (lambda ()
             (when aproject-plugin-environ
               (aproject--restore-environ))))
 
-(add-hook 'aproject-after-after-change-hook
+(add-hook 'aproject--after-after-change-hook
           (lambda ()
             (when aproject-plugin-environ
               (run-hooks 'aproject-environ-change-hook))))
