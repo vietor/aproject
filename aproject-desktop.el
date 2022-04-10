@@ -48,8 +48,8 @@
 
 (after-aproject-change
  (when aproject-plugin-desktop
-   (setq desktop-path
-         (list aproject-storedir))
+   (setq desktop-dirname aproject-storedir)
+   (setq desktop-path (list aproject-storedir))
    (desktop-read)))
 
 (provide 'aproject-desktop)
